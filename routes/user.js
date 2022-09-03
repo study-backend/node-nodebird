@@ -40,4 +40,16 @@ router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
   }
 })
 
+router.patch('', isLoggedIn, async (req, res, next) => {
+  try {
+    console.log(req.body.nick, req.user.id)
+    //const user1 = await User.findOne({ where: { id: req.user.id } }); 
+    const user = await User.update({ nick: req.body.nick }, { where: {id: req.user.id }});
+    res.send('success');
+  } catch(error) {
+    console.error(error);
+    next(error);
+  }
+})
+
 module.exports = router;
