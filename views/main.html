@@ -37,6 +37,9 @@
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
             {% endif %}
+            {% if twit.User.id === user.id %}
+              <button class="twit-delete">삭제</button>
+            {% endif %}
           </div>
         {% endfor %}
       </div>
@@ -61,6 +64,27 @@
           });
       });
     }
+
+    document.querySelectorAll('.twit-delete').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        const myId = document.querySelector('#my-id');
+        if (myId) {
+          const postId = tag.parentNode.querySelector('.twit-id').value;
+          console.log(postId);
+            if (confirm('삭제하시겠습니까?')) {
+              axios.delete(`/post/${postId}`)
+                .then(() => {
+                  location.reload();
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            }
+        }
+      });
+    });
+
+
     document.querySelectorAll('.twit-follow').forEach(function(tag) {
       tag.addEventListener('click', function() {
         const myId = document.querySelector('#my-id');

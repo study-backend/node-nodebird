@@ -59,4 +59,20 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
+router.delete('/:id', isLoggedIn, async (req, res, next) => {
+  try {
+    console.log(req.params.id, req.user.id)
+    const post = await Post.findOne({ where: {id: req.params.id }})
+    const hashtags = await post.getHashtags()
+    for(tag of hashtags)
+      await Hashtag.destroy( {where: {id: tag.id }} )
+    
+    await Post.destroy( {where: {id: req.params.id, userId: req.user.id} })
+    res.send('success')
+  } catch(error) {
+    console.error(error)
+    next(error)
+  }
+})
+
 module.exports = router;
