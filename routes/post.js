@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag } = require('../models');
+const { Post, Hashtag, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -72,6 +72,28 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
   } catch(error) {
     console.error(error)
     next(error)
+  }
+})
+
+router.post('/:id/like', isLoggedIn, async(req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id }});
+    await user.addLikePost(parseInt(req.params.id, 10));
+    res.send('success')
+  } catch(error) {
+    console.error(error);
+    next(error);
+  }
+})
+
+router.post('/:id/like-cancel', isLoggedIn, async(req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id }});
+    await user.removeLikePost(parseInt(req.params.id, 10));
+    res.send('success')
+  } catch(error) {
+    console.error(error);
+    next(error);
   }
 })
 
