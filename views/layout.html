@@ -23,6 +23,7 @@
             </div>
           <input id="my-id" type="hidden" value="{{user.id}}">
           <a id="my-profile" href="/profile" class="btn">내 프로필</a>
+          <button id="profile-update" class="btn">프로필 수정</button>
           <a id="logout" href="/auth/logout" class="btn">로그아웃</a>
         {% else %}
           <form id="login-form" action="/auth/login" method="post">
@@ -55,6 +56,25 @@
           alert(new URL(location.href).searchParams.get('loginError'));
         }
       };
+
+      document.getElementById('profile-update').addEventListener('click', function() {
+        const myId = document.querySelector('#my-id').value;
+        console.log(myId);
+        if(myId) {
+          const newNick = prompt('프로필을 수정하시겠습니까?')
+          if(newNick) {
+            console.log(newNick)
+            axios.patch(`/user`, { nick: newNick })
+                  .then(() => {
+                    location.reload();
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+          }
+        }
+
+      })
     </script>
     {% block script %}
     {% endblock %}

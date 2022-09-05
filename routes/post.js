@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag } = require('../models');
+const { Post, Hashtag, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -58,5 +58,43 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     next(error);
   }
 });
+
+router.delete('/:id', isLoggedIn, async (req, res, next) => {
+  try {
+    console.log(req.params.id, req.user.id)
+    const post = await Post.findOne({ where: {id: req.params.id }})
+    const hashtags = await post.getHashtags()
+    for(tag of hashtags)
+      await Hashtag.destroy( {where: {id: tag.id }} )
+    
+    await Post.destroy( {where: {id: req.params.id, userId: req.user.id} })
+    res.send('success')
+  } catch(error) {
+    console.error(error)
+    next(error)
+  }
+})
+
+router.post('/:id/like', isLoggedIn, async(req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id }});
+    await user.addLikePost(parseInt(req.params.id, 10));
+    res.send('success')
+  } catch(error) {
+    console.error(error);
+    next(error);
+  }
+})
+
+router.post('/:id/like-cancel', isLoggedIn, async(req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id }});
+    await user.removeLikePost(parseInt(req.params.id, 10));
+    res.send('success')
+  } catch(error) {
+    console.error(error);
+    next(error);
+  }
+})
 
 module.exports = router;

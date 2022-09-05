@@ -54,6 +54,13 @@ router.get('/logout', isLoggedIn, (req, res) => {
   req.logout(function(err) {
         if (err) { return next(err) }
         req.session.destroy();
+
+        /** 
+         * 카카오 로그아웃 구현하기
+         */
+        // "https://kauth.kakao.com/oauth/logout?client_id=${YOUR_REST_API_KEY}&logout_redirect_uri=${YOUR_LOGOUT_REDIRECT_URI}"
+
+
         res.redirect('/');
   });
 });
@@ -67,10 +74,7 @@ router.get('/kakao/callback', passport.authenticate('kakao', {
 });
 
 
-/** 
- * 카카오 로그아웃 구현하기
- */
-// todo:
+
 
 
 module.exports = router;
