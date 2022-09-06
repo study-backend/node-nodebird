@@ -1,0 +1,130 @@
+용어 정리 
+
+1. 백-백 API 서버 
+2. 프론트-백 서버
+3. 프론트 어플리케이션
+4. CORS 
+- 교차 출처 리소스 공유 - 할거냐 말거냐에 대한 설정을 해준다(보안강화를 위해서)
+ 리소스가 자신의 출처(도메인, 프로토콜, 포트)와 다를 때 교차 출처 HTTP 요청을 실행합니다.
+5. Domain (host)
+- 서버 주소 : url 주소
+6. Json Web Token
+ Javasctipt Object Notation Web Token
+
+
+
+backend 에서 해야할일 
+- api 호출할 수 있는 인증 체계는 무엇인지
+: 토큰 인증 체계가 추가되어 있다
+
+- 토큰을 발급하고 클라이언트는 저장?
+Http Header : authorizion: token
+
+만들어야 하는 Requset 
+- Header
+- Body { key : value } 
+
+만들어야 하는 Response
+- Header 
+- Body
+
+
+
+- 기능설계
+팔로워나 팔로잉 목록을 가져오는 API 만들기
+!!뭘 가져와야 할까? 
+팔로워나 팔로잉 목록
+!!데이터는 어디에 있을까? 
+라우터? 라우터는 데이터가 지나는 통로 
+데이터베이스!! 혹은 모델에 리스트가 있다
+!!어떻게 데이터를 요청할까?
+GET 요청(Request) 
+     axio를 통해서 -> (Response)
+!!어떻게 데이터를 응답할까?
+Response가 json을 통해서 -> (Request)
+!!만약에 찾는 데이터가 없다면?
+Response 를.. ㅠ_ㅠ 
+->없다고 응답을 준다!!
+에러는 아닌데 클라이언트에 알려줘야 한다 
+404 에러응답코드를 보낸다 (Not Found)
+- URL (L이 리소스인데 리소스가 없다)
+400(Bad Request)-클라이언트 에러를 보낸다
+근데 기획의도에 따라 빈 데이터로 200(OK)
+응답을 주기도 합니다 
+
+
+- 기능설계
+
+처리율 제한기를 쓰는 이유에 대한 정의
+- DDOS 같은 무리한 요청을 미리 사전 차단
+처리율 제한기의 
+무료 도메인과 프리미엄 도메인의 차이는 무엇?
+무료 : 1분에 10 Request 만 가능  
+프리미엄 : 1분 100 Request 만 가능
+VVP : 무제한 이다? (공격에 취약해서 하지 않음)
+
+어떻게 처리율 제한기를 차등적으로 둘까?
+DB 컬럼에 Type 이 구분되어는 있음
+DB에 접근하면 Type은 알 수 있다
+처리율 제한기를 적용하는 시점에 DB 쿼리를 하면 
+타입을 알 수 있을까?
+DB 쿼리가 가능한 이유는 무엇일까?
+-> Model을 만들었기 때문에 가능
+
+모든 API에서 프리/프리미엄을 분기해야 함
+미들웨어에 등록하면 
+(예시: Token verify - 외부에서 require)
+지금 우리는 전체 API에 대해 처리율 제한을 둬야 함
+api 호출할 때 전역적으로 미들웨어를 등록
+
+
+- POST 글 수정 API 만들기 
+작성된 글을 찾는다
+어떻게?? 
+post 모델(테이블) 에서 찾아본다
+post Id가 있어서 찾아본다
+글수정은 아무나 가능할까? 
+user Id가 일치되는 상황에서만 수정이 가능해야 한다 
+
+필요한 것 
+- userId 
+- postId
+find 할때 DB에서 찾는다 
+ 
+DB에서 찾은 후 DB를 업데이트를 한다
+필요한 것 
+- 수정하려는 content 값
+- 수정하려는 image 값
+
+수정해 주세요 Request 설계 
+- userId 
+- postId
+- 수정하려는 content 값
+- 수정하려는 image 값
+Detail 한 응답
+HTTP Request Body
+{
+	"userId" : 1,
+	"postId" : 2,
+	"oldConent" : "원래의 값"
+	"newContent" : "수정해줘",
+	"newImage" : "localhost:8002/imgs/update.png"
+}
+
+수정해 주세요 Response 설계
+정상일 때 
+- 200(OK), 204(No Content) 
+정상이 아닐 때 
+- 400(Bad Request), 401(Unauthorized) 
+- 500(Internal Server Error)
+
+Response Body 
+{} (정상적으로 되면 코드값만 주고 끝)
+
+
+
+
+
+
+
+
