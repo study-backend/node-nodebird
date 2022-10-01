@@ -1,0 +1,41 @@
+# git 
+
+브레인 스토밍
+- 소스 코드 백업
+- 소스 코드 공유 및 다운로드
+- 소스를 망쳤을 때 롤백 기능 
+- 히스토리를 볼 수 있는 기능
+- 다른 사람의 코드를 보기 (협업)
+- 여러 버전을 관리 (브랜치 포함)
+- 코드의 변경 사항을 비주얼로 확인
+- 깃 메시지를 기록하는 기능 
+
+- 분산형 형상관리 [툴]
+
+그 밖의 형상관리 툴 : Team foundation server(MS), change flow, SVN(중앙집중형 형태) 
+
+지금은 깃으로 천하 통일!! 
+
+## 명령어 
+- 로컬환경에 git 설치
+
+- cd "이동할 폴더"
+
+- git init
+
+- 협업 플랫폼에 repository 생성 (인터넷에서)
+  (github, gitlab, bitbucket, or pritvate network git server)
+
+- git remote add "origin" "https://github.com/study-backend/node-nodebird.git"
+
+- git remote -v 
+  제대로 연결이 되었는지 확인 
+
+- main을 pull 받거나 main branch를 checkout 
+
+- 이제 개발환경이 셋팅 
+
+- 이제 작업을 합니다 
+  ex) README.md 파일 작성
+
+- git add 
