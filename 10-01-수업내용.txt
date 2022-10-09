@@ -38,4 +38,24 @@
 - 이제 작업을 합니다 
   ex) README.md 파일 작성
 
-- git add 
+- git status (현재 추적 안되는 상태의 수정 파일)
+
+- git add .
+
+- git status (현재 깃에서 추적이 되는 상태의 수정 파일)
+
+- git commit -m "작업 메시지 작성"
+
+- git push origin main
+
+- 이러면 안된다 브랜치를 만들어야 한다 
+
+- git checkout -b feature/my-task (브랜치 생성)
+
+- git branch -a(전체보기) -l(로컬보기) -r(원격지보기)
+
+- git push orign feature/my-task
+
+- git fetch origin 으로 push 된걸 확인
+
+--- 위에는 혼자하는 내용 같이 하는 부분은 실습 후 반복 학습
